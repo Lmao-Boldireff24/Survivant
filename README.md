@@ -1,303 +1,312 @@
 # Survivant
-## Game Engine
+## C++ Game Engine
+ 
+C++ • OpenGL 4.6 • PhysX • ImGui
 
-## Introduction
+---
 
-The goal of this project is to create a game engine. In a team of 3, we'll research, structure, project and annotate our plan for tackling this task.  Once completed, we'll use our engine to develop a rather simple game demonstrating its core features.
+## Overview
 
+Survivant is a modular C++ game engine developed as a team project, with a focus on **engine architecture**, **real-time rendering**, **tooling**, and **systems integration**.
 
-## Project architecture
+Rather than targeting end-users or production deployment, Survivant is designed as a **technical showcase** demonstrating low-level engine development skills and design decisions.
 
-### Folder structure
+> ⚠️ This project is not intended to be a consumer-ready engine.  
+> Its purpose is educational, architectural, and portfolio-oriented.
 
-- Dependencies
-- Resources
-	- Editor
-	    - Fonts
-	    - Models
-	    - Scripts
-	  - Engine
-	    - Fonts
-	    - Materials
-	    - Models
-	    - Scripts
-	    - Shaders
-- Source
-	- Editor+
-	- Runtime+
-	- Engine
-		- App+
-		- Audio+
-		- Core+
-		- Physics+
-		- Rendering+
-		- Scripting+
-		- UI+
-	- Test+
+---
 
-### Notes
-- Each dependency has it's own subfolder.
-- A "+" at the end of a folder name denotes a C++ project and is not part of its name.
-- The root namespace for C++ projects is `Sv{Project}`
-	- _Exemple: Core’s root namespace is `SvCore`_
-- Each immediate subfolder in a project folder denotes a namespace.
-- Subfolders of C++ projects are separated in `{Project}/include/Survivant{Project}/{Subfolder}` and `{Project}/src/{Subfolder}` to make include paths contain the project's name, thus avoiding potential conflicts.
-	- _Exemple:_
-		- Core+
-			- Debug
-	- _expands to_
-		- Core
-			- include
-				- SurvivantCore
-					- Debug
-			- src
-				- Debug
+## 📸 Screenshots & Media
 
-___
+> TODO: Add editor screenshots  
+> TODO: Add runtime rendering screenshots  
+> TODO: Add short GIFs demonstrating features (editor, physics, rendering)
+
+docs/images/editor.png
+docs/images/runtime.png
+docs/images/physics.gif
+
+---
+
+## 🚀 Features
+
+- Modular C++ engine architecture
+- OpenGL 4.6 rendering backend
+- Real-time editor built with ImGui
+- Runtime / editor separation
+- PhysX-based 3D physics simulation
+- Asset pipeline for models, textures, shaders
+- Audio playback using SoLoud
+- Component-based scene structure
+- Cross-platform windowing and input (GLFW)
+
+> TODO: Add details about ECS vs custom component model  
+> TODO: Clarify scripting system scope (language, bindings, limitations)
+
+---
+
+## 🧭 Project Scope
+
+Survivant is a **learning-focused engine project** aimed at exploring:
+
+- Rendering abstraction
+- Engine modularity
+- Third-party library integration
+- Editor tooling
+- Runtime architecture
+
+It is **not** intended to:
+- Replace commercial engines
+- Provide production-ready workflows
+- Offer end-user installation support
+
+---
+
+## 🏗️ Engine Architecture
+
+### Folder Structure
+
+## 🏗️ Engine Architecture
+
+### Folder Structure
+
+Dependencies
+Resources
+├── Editor
+│   ├── Fonts
+│   ├── Models
+│   └── Scripts
+└── Engine
+    ├── Fonts
+    ├── Materials
+    ├── Models
+    ├── Scripts
+    └── Shaders
+
+Source
+├── Editor+
+├── Runtime+
+├── Engine
+│   ├── App+
+│   ├── Audio+
+│   ├── Core+
+│   ├── Physics+
+│   ├── Rendering+
+│   ├── Scripting+
+│   ├── UI+
+│   └── Test+
+
+---
 
 ## Graphics API
 
-For this project, we'll be using OpenGL for its relative ease of use, its long history in the industry and its compatibility with a wide range of hardware. Furthermore, the team's familiarity with this API, as well as the amount of resources available about it will enable us to produce results in a more efficient way and put more effort into other aspects of the engine.
+For this project, we use **OpenGL 4.6** for its relative ease of use, long industry history, and wide hardware compatibility. The team's familiarity with OpenGL allows us to focus more on engine architecture, tooling, and systems integration rather than low-level graphics issues.
 
-___
+> TODO: Add notes about rendering abstraction and pipeline management  
+> TODO: Include info about shader management and material system  
+
+---
 
 ## Third-Party Libraries
 
-This sub-section contains a list of the libraries used in this project, along with a brief explanation of their roles and importance (use, source files, type, loading process).
+This section lists the key libraries used in Survivant, with explanations of their role, integration, and usage.
 
-- Explanation of how it works
-- Justification for choosing the library
-- Library loading process
-- Integration of source files (precompiled .lib and/or .dll? generated with _FetchContent_?)
-- Static (.lib) / dynamic (.dll) library
+- Explanation of how it works  
+- Justification for choosing the library  
+- Library loading process  
+- Integration of source files (precompiled .lib/.dll, FetchContent, or header-only)  
+- Static (.lib) / dynamic (.dll) library  
 
-___
+---
 
 ### 1. GLFW (Windowing)
 
 #### Use
-
-This open-source library is crucial for creating and managing windows compatible with multiple rendering APIs.  GLFW provides high level multi-platform abstraction for graphical applications.
+GLFW provides multi-platform window creation, input handling, and OpenGL context management.
 
 #### Justification
-
-GLFW is the standard windowing API for OpenGL. In addition, the team already has experience with the library.
+GLFW is the standard windowing library for OpenGL projects and fits our cross-platform goals.
 
 #### Loading process
-
-1. Initialise with [glfwInit()](https://www.glfw.org/docs/3.3/group__init.html#ga317aac130a235ab08c6db0834907d85e).
-2. Set the graphics API version (in our case 4.6) with [glfwWindowHint](https://www.glfw.org/docs/3.3/group__window.html#ga7d9c8c62384b1e2821c4dc48952d2033)([GLFW_CONTEXT_VERSION_MAJOR](https://www.glfw.org/docs/3.3/group__window.html#gafe5e4922de1f9932d7e9849bb053b0c0), 4) & [glfwWindowHint](https://www.glfw.org/docs/3.3/group__window.html#ga7d9c8c62384b1e2821c4dc48952d2033)([GLFW_CONTEXT_VERSION_MINOR](https://www.glfw.org/docs/3.3/group__window.html#ga31aca791e4b538c4e4a771eb95cc2d07), 6).
-3. Create a default window with [glfwCreateWindow](https://www.glfw.org/docs/3.3/group__window.html#ga3555a418df92ad53f917597fe2f64aeb)(`width`, `height`, `title`).
-4. Use the library in the main loop.
-5. Select the window with [glfwMakeContextCurrent](https://www.glfw.org/docs/3.3/group__context.html#ga1c04dc242268f827290fe40aa1c91157)(`window`).
-6. Finish by destroying the window with [glfwDestroyWindow](https://www.glfw.org/docs/3.3/group__window.html#gacdf43e51376051d2c091662e9fe3d7b2)(`window`) then [glfwTerminate()](https://www.glfw.org/docs/3.3/group__init.html#gaaae48c0a18607ea4a4ba951d939f0901).
+1. Initialize with `glfwInit()`.  
+2. Set OpenGL version with `glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)` and `glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6)`.  
+3. Create a window with `glfwCreateWindow(width, height, title)`.  
+4. Make the context current with `glfwMakeContextCurrent(window)`.  
+5. Destroy the window and terminate with `glfwDestroyWindow(window)` and `glfwTerminate()`.
 
 #### Source files integration
+Added using _FetchContent_
 
-Added to the project using _FetchContent_
-
-#### Type of library
-
+#### Type
 Static
 
 #### Sources
+- [GLFW Documentation](https://www.glfw.org/docs/3.3/quick.html)
 
-- [https://www.glfw.org/docs/3.3/quick.html](https://www.glfw.org/docs/3.3/quick.html)
+---
 
-___
-
-### 2. Glad (GL Loader-Generator)
+### 2. Glad (GL Loader)
 
 #### Use
-
-Glad is a library for loading graphics API functions. It can be used with OpenGL, Vulkan, WGL, EGL, GLX and OpenGL ES
+Loads OpenGL functions dynamically for the specified API version.
 
 #### Justification
-
-Glad is an industry standard, easy to use and integrates well with GLFW, which we use for windowing. Furthermore, as the team has used this library on several projects in the past, it was an obvious choice for us.
+Industry-standard, works seamlessly with GLFW, minimal overhead.
 
 #### Loading process
-
-1. Initialize the graphics API with `gladLoadGL` by passing in a load function (e.g. `gladLoadGL(glfwGetProcAddress)` )
-2. Use the graphics API functions
+1. Initialize OpenGL functions using `gladLoadGL(glfwGetProcAddress)`.  
+2. Use OpenGL API functions normally.
 
 #### Source files integration
+Versioned with the project
 
-Source code versioned with the project
-
-#### Type of library
-
+#### Type
 Static
 
 #### Sources
+- [Glad Quick Start](https://github.com/Dav1dde/glad/wiki/C#quick-start)  
+- [Glad Generator](https://gen.glad.sh/)
 
-- [https://github.com/Dav1dde/glad/wiki/C#quick-start](https://github.com/Dav1dde/glad/wiki/C#quick-start)
-- [https://gen.glad.sh/](https://gen.glad.sh/)
-
-___
+---
 
 ### 3. ImGui (User Interface)
 
 #### Use
-
-ImGui is a graphical user interface library developed to support game engine development.
+Immediate-mode GUI library for creating the editor and debugging tools.
 
 #### Justification
-
-ImGui is a lightweight, easy-to-use library with a limited number of dependencies, which prioritizes iteration speed and visualization simplicity.
+Lightweight, minimal dependencies, fast iteration, integrates easily with OpenGL + GLFW.
 
 #### Loading process
-
-1. Initialize the context with `IMGUI_CHECKVERSION()` & `ImGui::CreateContext()`.
-2. Select flags for the target input types (ex: `io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard`).
-3. Initialize the backend (in our case GLFW and OpenGL) using `ImGui_ImplGlfw_InitForOpenGL(GLFW_WINDOW, true)` & `ImGui_ImplOpenGL3_Init(GLSL_VERSION_STRING)`.
-4. At the start of the main loop, start an ImGui frame using `ImGui_ImplOpenGL3_NewFrame()`, `ImGui_ImplGlfw_NewFrame()` & `ImGui::NewFrame()`
-5. At the end of the main loop, draw the ImGui frame using `ImGui::Render()` & `ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData())`
-6. When the application closes, stop the backend with `ImGui_ImplOpenGL3_Shutdown()` & `ImGui_ImplGlfw_Shutdown()` then destroy the context with `ImGui::DestroyContext()`
+1. Initialize context with `IMGUI_CHECKVERSION()` and `ImGui::CreateContext()`.  
+2. Configure input flags: `io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard`.  
+3. Initialize backends: `ImGui_ImplGlfw_InitForOpenGL()` and `ImGui_ImplOpenGL3_Init()`.  
+4. Start a frame with `ImGui_ImplOpenGL3_NewFrame()`, `ImGui_ImplGlfw_NewFrame()`, `ImGui::NewFrame()`.  
+5. Render frame with `ImGui::Render()` and `ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData())`.  
+6. Shutdown: `ImGui_ImplOpenGL3_Shutdown()`, `ImGui_ImplGlfw_Shutdown()`, `ImGui::DestroyContext()`.
 
 #### Source files integration
+Added using _FetchContent_
 
-Added to the project using _FetchContent_
-
-#### Type of library
-
+#### Type
 Static
 
 #### Sources
+- [ImGui GitHub](https://github.com/ocornut/imgui#dear-imgui)  
+- [Getting Started](https://github.com/ocornut/imgui/wiki/Getting-Started)
 
-- [https://github.com/ocornut/imgui#dear-imgui](https://github.com/ocornut/imgui#dear-imgui)
-- [https://github.com/ocornut/imgui/wiki/Getting-Started](https://github.com/ocornut/imgui/wiki/Getting-Started)
+---
 
-___
-
-### 4. PhysX (Physique)
+### 4. PhysX (Physics)
 
 #### Use
-
-PhysX lets you define actors and move them according to the laws of classical mechanics in a three-dimensional environment. It also supports collisions, joints and rigid body simulation as well as ray casts, sweeping and overlap tests.
+3D physics simulation including rigid bodies, collisions, joints, and raycasts.
 
 #### Justification
-
-PhysX is a very powerful, albeit complex, low-level library for creating realistic environments. It can also be configured to use the GPU for certain demanding tasks (CUDA).
+Powerful low-level physics engine with GPU acceleration (CUDA) for demanding simulations.
 
 #### Loading process
-
-1. Initialize using `PxCreateFoundation(PX_PHYSICS_VERSION, callback, error_callback)`
-2. Connect the foundation to a socket using `mPvd = PxCreatePvd(*gFoundation)`, `PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10)` & `mPvd->connect(*transport,PxPvdInstrumentationFlag::eALL)`. (Cooking?)
-3. Create a physics object with `mPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *mFoundation, PxTolerancesScale(), recordMemoryAllocations, mPvd)`.
-4. Use callbacks in the main loop
-5. Finish by releasing the physics object and foundation with `mPhysics->release()` & `mFoundation->release()`.
+1. Initialize foundation: `PxCreateFoundation()`.  
+2. Connect PVD for debug visualization: `PxCreatePvd()` + transport + `mPvd->connect()`.  
+3. Create physics object: `PxCreatePhysics()`.  
+4. Use callbacks in main loop.  
+5. Release objects: `mPhysics->release()`, `mFoundation->release()`.
 
 #### Source files integration
-
 ***TODO***
 
-#### Type of library
-
+#### Type
 ***TODO***
 
 #### Sources
+- [PhysX Overview](https://gameworksdocs.nvidia.com/PhysX/4.0/documentation/PhysXGuide/Manual/Introduction.html#a-brief-overview-of-physx)  
+- [Foundation API](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/apireference/files/group__foundation.html)
 
-- [https://gameworksdocs.nvidia.com/PhysX/4.0/documentation/PhysXGuide/Manual/Introduction.html#a-brief-overview-of-physx](https://gameworksdocs.nvidia.com/PhysX/4.0/documentation/PhysXGuide/Manual/Introduction.html#a-brief-overview-of-physx)
-- [https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/apireference/files/group__foundation.html](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/apireference/files/group__foundation.html)
-
-___
+---
 
 ### 5. SoLoud (Audio)
 
 #### Use
-
-SoLoud is an audio engine designed to simplify sound management.
+Audio engine for playback, filtering, volume control, and multi-format support.
 
 #### Justification
-
-Despite its ease of use, SoLoud offers a multitude of features such as adjustable volume and playback speed, audio filtering, adding sounds to a queue, support for different file formats and seamless audio looping.
+Simple to integrate, supports looping and multiple audio formats.
 
 #### Loading process
-
-1. Initialize a core using `SoLoud::Soloud gSoloud` & `gSoloud.init()`.
-2. Import a sound `SoLoud::Wav gWave` using `gWave.load("pew_pew.wav")`.
-3. Modify the sound as desired, then play it with `gSoloud.play(gWave)`.
-4. Finish with `gSoloud.deinit()`
+1. Initialize engine: `SoLoud::Soloud gSoloud; gSoloud.init()`.  
+2. Load audio: `SoLoud::Wav gWave; gWave.load("file.wav")`.  
+3. Play: `gSoloud.play(gWave)`.  
+4. Shutdown: `gSoloud.deinit()`.
 
 #### Source files integration
+Added using _FetchContent_
 
-Added to the project using _FetchContent_
-
-#### Type of library
-
+#### Type
 Static
 
 #### Sources
+- [SoLoud Homepage](https://solhsa.com/soloud/index.html)
 
-[https://solhsa.com/soloud/index.html](https://solhsa.com/soloud/index.html)
-
-___
+---
 
 ### 6. Assimp (3D Model Importer)
 
 #### Use
-
-The Open Asset Import Library (Assimp) lets you load and manipulate 3D models from a variety of file formats.
+Load and process 3D models from multiple formats (OBJ, FBX, etc.).
 
 #### Justification
-
-Assimp offers a powerful and flexible solution for processing 3D model data within an application. Furthermore, Assimp supports a wide range of formats, making it easy to import models from different sources.
+Flexible and robust model loader with wide format support.
 
 #### Loading process
-
-1. Create an instance of the `Importer` class (i.e.: `Assimp::Importer importer`)
-2. Load the model file using `importer.ReadFile`, specifying the file path and the necessary import flags. (ex: `const aiScene* scene = importer.ReadFile("model.obj", aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByType)` )
-3. Process data from the loaded Assimp scene
+1. Create importer: `Assimp::Importer importer`.  
+2. Load model: `importer.ReadFile("model.obj", flags)`.  
+3. Process the scene data.
 
 #### Source files integration
+Added using _FetchContent_
 
-Added to the project using _FetchContent_
-
-#### Type of library
-
+#### Type
 Static
 
 #### Sources
+- [Assimp](https://www.assimp.org/)  
+- [GitHub](https://github.com/assimp/assimp)  
+- [Docs](https://assimp-docs.readthedocs.io/en/latest/usage/use_the_lib.html)
 
-- [https://www.assimp.org/](https://www.assimp.org/)
-- [https://github.com/assimp/assimp](https://github.com/assimp/assimp)
-- [https://assimp-docs.readthedocs.io/en/latest/usage/use_the_lib.html](https://assimp-docs.readthedocs.io/en/latest/usage/use_the_lib.html)
-
-___
+---
 
 ### 7. STB image (Texture Importer)
 
 #### Use
-
-The STB image library is a simple, lightweight library for loading images in multiple formats.
+Header-only library for loading images in multiple formats.
 
 #### Justification
-
-STB image offers a fast, easy-to-use solution for incorporating images into graphics applications.
+Lightweight, fast, and easy to integrate for textures.
 
 #### Loading process
-
-1. Load a file using `stbi_load` (ex: `stbi_load("texture.png", &width, &height, &channels, 0)` )
-
-2. Once the loaded data is no longer required, free the memory with `stbi_image_free`
+1. Load images with `stbi_load()`.  
+2. Free memory with `stbi_image_free()` when done.
 
 #### Source files integration
+Versioned with the project
 
-Source code versioned with the project
-
-#### Type of library
-
+#### Type
 Static – Header Only
 
 #### Sources
+- [STB Image](https://github.com/nothings/stb/blob/master/stb_image.h)
 
-- [https://github.com/nothings/stb/blob/master/stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
-
-___
+---
 
 ## Conclusion
 
-Briefly summarize the key points of your documentation.
+Survivant is a modular, cross-platform C++ game engine showcasing:
 
-***TODO***
+- Real-time rendering and editor functionality  
+- Modular engine design  
+- Third-party library integration (GLFW, Glad, ImGui, PhysX, SoLoud, Assimp, STB)  
+- Component-based architecture and asset pipeline
+
+> TODO: Add final notes on performance, limitations, future work, and contribution guidelines
+
+
