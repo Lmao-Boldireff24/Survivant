@@ -106,195 +106,197 @@ For this project, we use **OpenGL 4.6** for its relative ease of use, long indus
 > TODO: Include info about shader management and material system  
 
 ---
+## 🛠️ Third-Party Libraries
 
-## Third-Party Libraries
+This section contains a list of the libraries used in this project, along with a brief explanation of their roles and importance.
 
-This section lists the key libraries used in Survivant, with explanations of their role, integration, and usage.
-
-- Explanation of how it works  
-- Justification for choosing the library  
-- Library loading process  
-- Integration of source files (precompiled .lib/.dll, FetchContent, or header-only)  
-- Static (.lib) / dynamic (.dll) library  
-
----
-
-### 1. GLFW (Windowing)
+<details>
+<summary>1. GLFW (Windowing)</summary>
 
 #### Use
-GLFW provides multi-platform window creation, input handling, and OpenGL context management.
+This open-source library is crucial for creating and managing windows compatible with multiple rendering APIs. GLFW provides high level multi-platform abstraction for graphical applications.
 
 #### Justification
-GLFW is the standard windowing library for OpenGL projects and fits our cross-platform goals.
+GLFW is the standard windowing API for OpenGL. The team already has experience with it.
 
 #### Loading process
-1. Initialize with `glfwInit()`.  
-2. Set OpenGL version with `glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)` and `glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6)`.  
-3. Create a window with `glfwCreateWindow(width, height, title)`.  
-4. Make the context current with `glfwMakeContextCurrent(window)`.  
-5. Destroy the window and terminate with `glfwDestroyWindow(window)` and `glfwTerminate()`.
+1. Initialise with [glfwInit()](https://www.glfw.org/docs/3.3/group__init.html#ga317aac130a235ab08c6db0834907d85e)
+2. Set OpenGL version (4.6) with `glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)` & `glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6)`
+3. Create a default window with `glfwCreateWindow(width, height, title)`
+4. Select the window with `glfwMakeContextCurrent(window)`
+5. Use GLFW in the main loop
+6. Destroy the window with `glfwDestroyWindow(window)` & `glfwTerminate()`
 
 #### Source files integration
 Added using _FetchContent_
 
-#### Type
+#### Type of library
 Static
 
 #### Sources
 - [GLFW Documentation](https://www.glfw.org/docs/3.3/quick.html)
 
----
+</details>
 
-### 2. Glad (GL Loader)
+<details>
+<summary>2. Glad (GL Loader-Generator)</summary>
 
 #### Use
-Loads OpenGL functions dynamically for the specified API version.
+Glad loads graphics API functions. Supports OpenGL, Vulkan, WGL, EGL, GLX, and OpenGL ES.
 
 #### Justification
-Industry-standard, works seamlessly with GLFW, minimal overhead.
+Glad is standard, easy to use, integrates with GLFW, and familiar to the team.
 
 #### Loading process
-1. Initialize OpenGL functions using `gladLoadGL(glfwGetProcAddress)`.  
-2. Use OpenGL API functions normally.
+1. Initialize the graphics API with `gladLoadGL(glfwGetProcAddress)`
+2. Use OpenGL functions normally
 
 #### Source files integration
-Versioned with the project
+Source code versioned with the project
 
-#### Type
+#### Type of library
 Static
 
 #### Sources
-- [Glad Quick Start](https://github.com/Dav1dde/glad/wiki/C#quick-start)  
+- [Glad GitHub](https://github.com/Dav1dde/glad/wiki/C#quick-start)
 - [Glad Generator](https://gen.glad.sh/)
 
----
+</details>
 
-### 3. ImGui (User Interface)
+<details>
+<summary>3. ImGui (User Interface)</summary>
 
 #### Use
-Immediate-mode GUI library for creating the editor and debugging tools.
+Graphical user interface library for engine development.
 
 #### Justification
-Lightweight, minimal dependencies, fast iteration, integrates easily with OpenGL + GLFW.
+Lightweight, easy-to-use, few dependencies, prioritizes iteration speed.
 
 #### Loading process
-1. Initialize context with `IMGUI_CHECKVERSION()` and `ImGui::CreateContext()`.  
-2. Configure input flags: `io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard`.  
-3. Initialize backends: `ImGui_ImplGlfw_InitForOpenGL()` and `ImGui_ImplOpenGL3_Init()`.  
-4. Start a frame with `ImGui_ImplOpenGL3_NewFrame()`, `ImGui_ImplGlfw_NewFrame()`, `ImGui::NewFrame()`.  
-5. Render frame with `ImGui::Render()` and `ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData())`.  
-6. Shutdown: `ImGui_ImplOpenGL3_Shutdown()`, `ImGui_ImplGlfw_Shutdown()`, `ImGui::DestroyContext()`.
+1. `IMGUI_CHECKVERSION()` & `ImGui::CreateContext()`
+2. Set input flags: `io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard`
+3. Initialize backend: `ImGui_ImplGlfw_InitForOpenGL()` & `ImGui_ImplOpenGL3_Init()`
+4. In main loop: `ImGui_ImplOpenGL3_NewFrame()`, `ImGui_ImplGlfw_NewFrame()`, `ImGui::NewFrame()`
+5. Render frame: `ImGui::Render()`, `ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData())`
+6. Shutdown: `ImGui_ImplOpenGL3_Shutdown()`, `ImGui_ImplGlfw_Shutdown()`, `ImGui::DestroyContext()`
 
 #### Source files integration
 Added using _FetchContent_
 
-#### Type
+#### Type of library
 Static
 
 #### Sources
-- [ImGui GitHub](https://github.com/ocornut/imgui#dear-imgui)  
+- [ImGui GitHub](https://github.com/ocornut/imgui#dear-imgui)
 - [Getting Started](https://github.com/ocornut/imgui/wiki/Getting-Started)
 
----
+</details>
 
-### 4. PhysX (Physics)
+<details>
+<summary>4. PhysX (Physics)</summary>
 
 #### Use
-3D physics simulation including rigid bodies, collisions, joints, and raycasts.
+Simulates 3D physics: actors, collisions, joints, rigid bodies, raycasts.
 
 #### Justification
-Powerful low-level physics engine with GPU acceleration (CUDA) for demanding simulations.
+Powerful, GPU-accelerated optional, industry-standard for realistic physics.
 
 #### Loading process
-1. Initialize foundation: `PxCreateFoundation()`.  
-2. Connect PVD for debug visualization: `PxCreatePvd()` + transport + `mPvd->connect()`.  
-3. Create physics object: `PxCreatePhysics()`.  
-4. Use callbacks in main loop.  
-5. Release objects: `mPhysics->release()`, `mFoundation->release()`.
+1. `PxCreateFoundation(PX_PHYSICS_VERSION, callback, error_callback)`
+2. Connect foundation to PVD socket (`PxCreatePvd`, `PxDefaultPvdSocketTransportCreate`, `mPvd->connect(...)`)
+3. Create physics object (`PxCreatePhysics(...)`)
+4. Use physics in main loop
+5. Release objects: `mPhysics->release()`, `mFoundation->release()`
 
 #### Source files integration
 ***TODO***
 
-#### Type
+#### Type of library
 ***TODO***
 
 #### Sources
-- [PhysX Overview](https://gameworksdocs.nvidia.com/PhysX/4.0/documentation/PhysXGuide/Manual/Introduction.html#a-brief-overview-of-physx)  
+- [PhysX Overview](https://gameworksdocs.nvidia.com/PhysX/4.0/documentation/PhysXGuide/Manual/Introduction.html#a-brief-overview-of-physx)
 - [Foundation API](https://docs.nvidia.com/gameworks/content/gameworkslibrary/physx/apireference/files/group__foundation.html)
 
----
+</details>
 
-### 5. SoLoud (Audio)
+<details>
+<summary>5. SoLoud (Audio)</summary>
 
 #### Use
-Audio engine for playback, filtering, volume control, and multi-format support.
+Audio engine for playing sounds and music.
 
 #### Justification
-Simple to integrate, supports looping and multiple audio formats.
+Simple API, supports multiple formats, filters, queues, loops, volume, and speed control.
 
 #### Loading process
-1. Initialize engine: `SoLoud::Soloud gSoloud; gSoloud.init()`.  
-2. Load audio: `SoLoud::Wav gWave; gWave.load("file.wav")`.  
-3. Play: `gSoloud.play(gWave)`.  
-4. Shutdown: `gSoloud.deinit()`.
+1. `SoLoud::Soloud gSoloud; gSoloud.init()`
+2. Load sound: `SoLoud::Wav gWave; gWave.load("pew_pew.wav")`
+3. Play: `gSoloud.play(gWave)`
+4. Shutdown: `gSoloud.deinit()`
 
 #### Source files integration
 Added using _FetchContent_
 
-#### Type
+#### Type of library
 Static
 
 #### Sources
-- [SoLoud Homepage](https://solhsa.com/soloud/index.html)
+- [SoLoud](https://solhsa.com/soloud/index.html)
 
----
+</details>
 
-### 6. Assimp (3D Model Importer)
+<details>
+<summary>6. Assimp (3D Model Importer)</summary>
 
 #### Use
-Load and process 3D models from multiple formats (OBJ, FBX, etc.).
+Load and process 3D models in multiple formats.
 
 #### Justification
-Flexible and robust model loader with wide format support.
+Flexible, supports many formats, simplifies model integration.
 
 #### Loading process
-1. Create importer: `Assimp::Importer importer`.  
-2. Load model: `importer.ReadFile("model.obj", flags)`.  
-3. Process the scene data.
+1. Create importer: `Assimp::Importer importer`
+2. Load model: `importer.ReadFile("model.obj", aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByType)`
+3. Process data from scene
 
 #### Source files integration
 Added using _FetchContent_
 
-#### Type
+#### Type of library
 Static
 
 #### Sources
-- [Assimp](https://www.assimp.org/)  
-- [GitHub](https://github.com/assimp/assimp)  
+- [Assimp Official](https://www.assimp.org/)
+- [GitHub](https://github.com/assimp/assimp)
 - [Docs](https://assimp-docs.readthedocs.io/en/latest/usage/use_the_lib.html)
 
----
+</details>
 
-### 7. STB image (Texture Importer)
+<details>
+<summary>7. STB image (Texture Importer)</summary>
 
 #### Use
-Header-only library for loading images in multiple formats.
+Lightweight library for loading images in multiple formats.
 
 #### Justification
-Lightweight, fast, and easy to integrate for textures.
+Fast and easy solution for textures.
 
 #### Loading process
-1. Load images with `stbi_load()`.  
-2. Free memory with `stbi_image_free()` when done.
+1. Load: `stbi_load("texture.png", &width, &height, &channels, 0)`
+2. Free memory: `stbi_image_free()`
 
 #### Source files integration
-Versioned with the project
+Versioned with project
 
-#### Type
+#### Type of library
 Static – Header Only
 
 #### Sources
 - [STB Image](https://github.com/nothings/stb/blob/master/stb_image.h)
+
+</details>
+
 
 ---
 
