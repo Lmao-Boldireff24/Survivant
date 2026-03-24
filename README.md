@@ -11,24 +11,16 @@ Survivant is a modular C++ game engine developed as a team project, with a focus
 
 Rather than targeting end-users or production deployment, Survivant is designed as a **technical showcase** demonstrating low-level engine development skills and design decisions.
 
-> ⚠️ This project is not intended to be a consumer-ready engine.  
-> Its purpose is educational, architectural, and portfolio-oriented.
+---
+
+## Screenshots & Media
+
+https://github.com/user-attachments/assets/69613145-a08a-4a1c-8bc6-7f550074630c
+
 
 ---
 
-## 📸 Screenshots & Media
-
-> TODO: Add editor screenshots  
-> TODO: Add runtime rendering screenshots  
-> TODO: Add short GIFs demonstrating features (editor, physics, rendering)
-
-docs/images/editor.png
-docs/images/runtime.png
-docs/images/physics.gif
-
----
-
-## 🚀 Features
+## Features
 
 - Modular C++ engine architecture
 - OpenGL 4.6 rendering backend
@@ -45,7 +37,7 @@ docs/images/physics.gif
 
 ---
 
-## 🧭 Project Scope
+## Project Scope
 
 Survivant is a **learning-focused engine project** aimed at exploring:
 
@@ -61,12 +53,6 @@ It is **not** intended to:
 - Offer end-user installation support
 
 ---
-
-## 🏗️ Engine Architecture
-
-### Folder Structure
-
-## 🏗️ Engine Architecture
 
 ### Folder Structure
 
@@ -102,11 +88,8 @@ Source
 
 For this project, we use **OpenGL 4.6** for its relative ease of use, long industry history, and wide hardware compatibility. The team's familiarity with OpenGL allows us to focus more on engine architecture, tooling, and systems integration rather than low-level graphics issues.
 
-> TODO: Add notes about rendering abstraction and pipeline management  
-> TODO: Include info about shader management and material system  
-
 ---
-## 🛠️ Third-Party Libraries
+## Third-Party Libraries
 
 This section contains a list of the libraries used in this project, along with a brief explanation of their roles and importance.
 
@@ -308,7 +291,5 @@ Survivant is a modular, cross-platform C++ game engine showcasing:
 - Modular engine design  
 - Third-party library integration (GLFW, Glad, ImGui, PhysX, SoLoud, Assimp, STB)  
 - Component-based architecture and asset pipeline
-
-> TODO: Add final notes on performance, limitations, future work, and contribution guidelines
 
 
